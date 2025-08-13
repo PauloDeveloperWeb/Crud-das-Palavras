@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jogo das Sílabas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+
     <style>
+        
         :root {
-            --primary-color: #4a6fa5;
-            --secondary-color: #1c8eff;
+            --primary-color: #124186;
+            --secondary-color: #ff9f1c;
             --accent-color: #e71d36;
             --light-color: #f8f9fa;
             --dark-color: #343a40;
@@ -19,7 +22,7 @@
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
+              font-family: 'Inter', sans-serif;
         }
 
         body {
@@ -30,7 +33,7 @@
         }
 
         .container {
-            max-width: 1350px;
+            max-width: 2000px;
             margin: 0 auto;
             background-color: white;
             border-radius: 15px;
@@ -40,19 +43,167 @@
             overflow: hidden;
         }
 
-        h1 {
+        h1, h2 {
             color: var(--primary-color);
             text-align: center;
             margin-bottom: 20px;
-            font-size: 2.2rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Estilos das abas */
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--light-color);
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            background-color: var(--light-color);
+            border-radius: 5px 5px 0 0;
+            margin-right: 5px;
+        }
+
+        .tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid var(--light-color);
+            border-radius: 0 0 5px 5px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Estilos do formulário */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn {
+            font-size: 1.2rem;
+            min-width: 150px;
+            height: 70px;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #3a5a8f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #e68f1a;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #25a99a;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--error-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c91934;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background-color: #ffc107;
+            color: var(--dark-color);
+        }
+
+        .btn-warning:hover {
+            background-color: #e0a800;
+            transform: translateY(-2px);
+        }
+
+        /* Estilos da tabela */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: var(--light-color);
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 5px;
+        }
+
+        /* Estilos do jogo */
+        .game-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
 
         .round-info {
-            background-color: var(--secondary-color);
+            background-color: #4a6fa5;
             color: white;
+            height: 150px;
             padding: 10px;
-            min-height: 100px;
             border-radius: 10px;
             text-align: center;
             margin-bottom: 20px;
@@ -65,12 +216,12 @@
 
         .timer {
             background-color: var(--accent-color);
-            color: rgb(243, 246, 240);          
-            padding: 5px 10px;            
+            color: white;
+            padding: 5px 10px;
             border-radius: 20px;
             font-size: 3rem;
-            min-width: 135px;
-            min-height: 60px;
+            min-width: 200px;
+            min-height: 70px;
             text-align: center;
         }
 
@@ -87,24 +238,22 @@
             gap: 10px;
         }
 
-        #next-round {
-            margin-left: auto;
-        }
-
         .word-display {
-            background-color: var(--light-color);
-            border: 3px solid var(--primary-color);
+            background-color:rgb(0, 179, 255);
+            border: 3px Solid var(--primary-color);
             border-radius: 10px;
             padding: 30px;
+            height: 350px;           
             text-align: center;
-            font-size: 4rem;
+            font-size: 5rem;
             font-weight: bold;
-            color: var(--primary-color);
-            min-height: 250px;
+            color: rgb(245, 244, 244);
+            min-height: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            margin-bottom: 5rem;
         }
 
         .loading {
@@ -113,7 +262,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(0, 0, 0, 0.8);
             display: none;
             align-items: center;
             justify-content: center;
@@ -125,7 +274,7 @@
         .spinner {
             width: 50px;
             height: 50px;
-            border: 5px solid rgba(74, 111, 165, 0.3);
+            border: 5px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
             border-top-color: var(--primary-color);
             animation: spin 1s ease-in-out infinite;
@@ -266,73 +415,6 @@
             color: white;
         }
 
-        button {
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn {
-            font-size: 1rem;
-            min-width: 120px;
-        }
-
-        .btn-primary {
-            background-color: var(--primary-color);
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background-color: #3a5a8f;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-secondary {
-            background-color: var(--secondary-color);
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background-color: #e68f1a;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-success {
-            background-color: var(--success-color);
-            color: white;
-        }
-
-        .btn-success:hover {
-            background-color: #25a99a;
-            transform: translateY(-2px);
-        }
-
-        .btn-danger {
-            background-color: var(--error-color);
-            color: white;
-        }
-
-        .btn-danger:hover {
-            background-color: #c91934;
-            transform: translateY(-2px);
-        }
-
-        .btn-warning {
-            background-color: #ffc107;
-            color: var(--dark-color);
-        }
-
-        .btn-warning:hover {
-            background-color: #e0a800;
-            transform: translateY(-2px);
-        }
-
         .winner {
             position: fixed;
             top: 0;
@@ -471,53 +553,108 @@
 </head>
 <body>
     <div class="container">
-        <h1>Jogo das Sílabas</h1>
+        <h1>Jogo das Palavras</h1>
         
-        <div class="round-info">
-            <div>
-                Rodada <span id="current-round">1</span> de 4 - 
-                Palavras com <span id="syllables-count">1</span> sílaba
-            </div>
-            <div class="timer" id="timer">20s</div>
+        <div class="tabs">
+            <div class="tab active" data-tab="students">Alunos</div>
+            <div class="tab" data-tab="words">Palavras</div>
+            <div class="tab" data-tab="game">Jogar</div>
         </div>
         
-        <div class="game-area">
-            <div class="top-controls">
-                <div class="word-controls">
-                    <button class="btn btn-primary" id="draw-word">Sortear Palavra</button>
-                    <button class="btn btn-warning" id="reset-btn">Reiniciar Pontos</button>
-                </div>
-                <div class="answer-controls">
-                    <button class="btn btn-success" id="correct-btn">Acertou ✓</button>
-                    <button class="btn btn-danger" id="wrong-btn">Errou ✗</button>
-                </div>
-                <button class="btn btn-secondary" id="next-round" disabled>Próxima Rodada</button>
+        <!-- ABA DE ALUNOS -->
+        <div id="students" class="tab-content active">
+            <h2>Gerenciar Alunos</h2>
+            <div class="form-group">
+                <label for="student-name">Nome do Aluno:</label>
+                <input type="text" id="student-name" placeholder="Digite o nome do aluno">
             </div>
+            <button class="btn btn-primary" id="add-student">Adicionar Aluno</button>
             
-            <div class="word-display">
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <div>Sortendo palavra...</div>
-                </div>
-                <span id="current-word">Clique em "Sortear Palavra" para começar</span>
+            <table id="students-table">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <!-- ABA DE PALAVRAS -->
+        <div id="words" class="tab-content">
+            <h2>Gerenciar Palavras</h2>
+            <div class="form-group">
+                <label for="word-syllables">Número de Sílabas:</label>
+                <select id="word-syllables">
+                    <option value="1">1 Sílaba</option>
+                    <option value="2">2 Sílabas</option>
+                    <option value="3">3 Sílabas</option>
+                    <option value="4">4 Sílabas</option>
+                </select>
             </div>
+            <div class="form-group">
+                <label for="word-text">Palavra:</label>
+                <input type="text" id="word-text" placeholder="Digite a palavra">
+            </div>
+            <button class="btn btn-primary" id="add-word">Adicionar Palavra</button>
             
-            <div class="game-content">
-                <div class="students-section">
-                    <div class="students-list" id="students-list">
-                        <!-- Alunos serão inseridos aqui via JavaScript -->
+            <table id="words-table">
+                <thead>
+                    <tr>
+                        <th>Palavra</th>
+                        <th>Sílabas</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+        
+        <!-- ABA DO JOGO -->
+        <div id="game" class="tab-content">
+            <div class="game-area">
+                <div class="round-info">
+                    <div>
+                        Rodada <span id="current-round">1</span> de 4 - 
+                        Palavras com <span id="syllables-count">1</span> sílaba
                     </div>
+                    <div class="timer" id="timer">20s</div>
                 </div>
                 
-                <div class="ranking-section">
-                    <div class="ranking-title">Ranking</div>
-                    <ol class="ranking-list" id="ranking-list">
-                        <!-- Ranking será inserido aqui via JavaScript -->
-                    </ol>
+                <div class="top-controls">
+                    <div class="word-controls">
+                        <button class="btn btn-primary" id="draw-word">Sortear Palavra</button>
+                        <button class="btn btn-warning" id="reset-btn">Reiniciar Pontos</button>
+                    </div>
+                    <div class="answer-controls">
+                        <button class="btn btn-success" id="correct-btn">Acertou ✓</button>
+                        <button class="btn btn-danger" id="wrong-btn">Errou ✗</button>
+                    </div>
+                    <button class="btn btn-secondary" id="next-round" disabled>Próxima Rodada</button>
+                </div>
+                
+                <div class="word-display">
+                    <div class="loading" id="loading">
+                        <div class="spinner"></div>
+                        <div>Sorteando palavra...</div>
+                    </div>
+                    <span id="current-word">Clique em "Sortear Palavra" para começar</span>
+                </div>
+                
+                <div class="game-content">
+                    <div class="students-section">
+                        <div class="students-list" id="students-list"></div>
+                    </div>
+                    
+                    <div class="ranking-section">
+                        <div class="ranking-title">Ranking</div>
+                        <ol class="ranking-list" id="ranking-list"></ol>
+                    </div>
                 </div>
             </div>
         </div>
-        <div>
+        <div style="background-color: rgb(244, 241, 235);">
             <h4>Regras do Game</h3>
             <p>Cada jogador joga 1 vez por rodada.</p>
             <h4>Pontuação por Rodada.</h4>
@@ -527,8 +664,6 @@
             <p>Rodada 4 vale 4 Ponto.</p>
             <p>Quem fizer mais ponto Vence o Game.</p>
         </div>
-
-
     </div>
     
     <div class="winner" id="winner-modal">
@@ -543,19 +678,20 @@
     
     <script>
         // Dados do jogo
-        const students = [
-            "Cecília", "Elisa", "Emanuelly", "Enzo", "Estela", 
+        let appData = {
+            students: JSON.parse(localStorage.getItem('game-students')) || [
+                "Cecília", "Elisa", "Emanuelly", "Enzo", "Estela", 
             "Ester Victória", "Esther", "Gustavo Henrique", "Heitor Gonçalves", 
             "Heitor Tavares", "Heloísa Vitória", "Isabelly Manoelly", "Isadora", 
             "Kamilla Vitória", "Lara", "Luísa", "Mariana", "Nicolas", 
             "Oliver Andrade", "Oliver Salgado", "Théo", "Valentina"
-        ].sort((a, b) => a.localeCompare(b));
-
-        const wordsBySyllables = {
-            1: ["PÉ", "SOL", "MAR", "FÉ", "MÃO", "LUA", "VIM", "RÉ", "PÁ", "DÓ"],
-            2: ["CASA", "BOCA", "DEDO", "FOCA", "GATO", "LUPA", "MAPA", "NUVEM", "PATO", "RATO", "SACO", "TATU", "VELA", "ZELO", "BOLA", "CAMA", "DADO", "FADA", "GELO", "JACA", "LIXO", "MALA", "NENA", "PANO", "QUEIJO", "ROSA", "SUCO", "TACO", "URSO", "VAGA"],
-            3: ["BANANA", "CAVALO", "ABACAXI", "BONECA", "CAMISA", "FACADA", "GALINHA", "JANELA", "LAGARTO", "MACACO", "NAVIO", "PALHAÇO", "ROBALO", "SEREIA", "UVAS", "VACINA", "XÍCARA", "TOMATE", "PANELA", "CABANA", "GIRAFA", "AVENTURA"],
-            4: ["DINOSSAURO", "ELEFANTE", "HAMBÚRGUER", "ORNITORRINCO", "QUEBRADO", "TARTARUGA", "BICICLETA", "TELEVISÃO", "PARALELEPÍPEDO", "BIBLIOTECA", "CROCODILO", "ELETRICIDADE", "FOTOGRAFIA", "HELICÓPTERO", "JABUTICABA", "KARATÊ", "LUMINÁRIA", "MACARRONADA", "TELEVISOR", "CACHOEIRA", "DESODORANTE", "ESCOVA"]
+            ],
+            wordsBySyllables: JSON.parse(localStorage.getItem('game-words')) || {
+                1: ["PÉ", "SOL", "MAR", "FÉ", "MÃO", "LUA", "VIM", "RÉ", "PÁ", "DÓ"],
+                2: ["CASA", "BOCA", "DEDO", "FOCA", "GATO", "LUPA", "MAPA", "NUVEM", "PATO", "RATO"],
+                3: ["BANANA", "CAVALO", "ABACAXI", "BONECA", "CAMISA", "FACADA", "GALINHA", "JANELA"],
+                4: ["DINOSSAURO", "ELEFANTE", "HAMBÚRGUER", "ORNITORRINCO", "QUEBRADO", "TARTARUGA"]
+            }
         };
 
         // Estado do jogo
@@ -571,6 +707,18 @@
 
         // Elementos do DOM
         const elements = {
+            // Elementos do admin
+            tabs: document.querySelectorAll('.tab'),
+            tabContents: document.querySelectorAll('.tab-content'),
+            studentName: document.getElementById('student-name'),
+            addStudentBtn: document.getElementById('add-student'),
+            studentsTable: document.getElementById('students-table').querySelector('tbody'),
+            wordSyllables: document.getElementById('word-syllables'),
+            wordText: document.getElementById('word-text'),
+            addWordBtn: document.getElementById('add-word'),
+            wordsTable: document.getElementById('words-table').querySelector('tbody'),
+            
+            // Elementos do jogo
             currentRound: document.getElementById('current-round'),
             syllablesCount: document.getElementById('syllables-count'),
             currentWord: document.getElementById('current-word'),
@@ -589,66 +737,261 @@
             timer: document.getElementById('timer')
         };
 
-        // Inicializa o jogo
-        function initGame() {
-            const savedState = localStorage.getItem('syllableGameState');
-            if (savedState) {
-                gameState = JSON.parse(savedState);
-                updateRoundInfo();
-                renderStudentsList();
-                updateRanking();
-                
-                if (gameState.currentRound > 4) {
-                    showWinner();
-                }
-            } else {
-                resetGameData();
-            }
-            
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+            loadStudents();
+            loadWords();
             setupEventListeners();
-            toggleAnswerButtons(false);
+            initGameData();
+        });
+
+        // Funções do CRUD
+        function initTabs() {
+            elements.tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    elements.tabs.forEach(t => t.classList.remove('active'));
+                    elements.tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    tab.classList.add('active');
+                    document.getElementById(tab.dataset.tab).classList.add('active');
+                });
+            });
         }
 
-        // Reinicia os dados do jogo
-        function resetGameData() {
-            gameState = {
-                currentRound: 1,
-                currentWord: "",
-                currentStudentIndex: 0,
-                studentsData: {},
-                roundFinished: false,
-                timer: null,
-                timeLeft: 20
-            };
+        function loadStudents() {
+            elements.studentsTable.innerHTML = '';
+            appData.students.sort().forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student}</td>
+                    <td class="action-btns">
+                        <button class="btn-danger" onclick="deleteStudent(${index})">Excluir</button>
+                    </td>
+                `;
+                elements.studentsTable.appendChild(row);
+            });
+        }
+
+        function loadWords() {
+            elements.wordsTable.innerHTML = '';
+            for (const syllables in appData.wordsBySyllables) {
+                appData.wordsBySyllables[syllables].forEach((word, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${word}</td>
+                        <td>${syllables}</td>
+                        <td class="action-btns">
+                            <button class="btn-danger" onclick="deleteWord(${syllables}, ${index})">Excluir</button>
+                        </td>
+                    `;
+                    elements.wordsTable.appendChild(row);
+                });
+            }
+        }
+
+        function addStudent() {
+            const name = elements.studentName.value.trim();
+            if (name && !appData.students.includes(name)) {
+                appData.students.push(name);
+                saveData();
+                elements.studentName.value = '';
+                loadStudents();
+                initGameData(); // Atualiza os dados do jogo
+            }
+        }
+
+        function addWord() {
+            const syllables = elements.wordSyllables.value;
+            const word = elements.wordText.value.trim().toUpperCase();
             
-            students.forEach(student => {
+            if (word && !appData.wordsBySyllables[syllables].includes(word)) {
+                appData.wordsBySyllables[syllables].push(word);
+                saveData();
+                elements.wordText.value = '';
+                loadWords();
+            }
+        }
+
+        function deleteStudent(index) {
+            if (confirm(`Tem certeza que deseja excluir ${appData.students[index]}?`)) {
+                appData.students.splice(index, 1);
+                saveData();
+                loadStudents();
+                initGameData(); // Atualiza os dados do jogo
+            }
+        }
+
+        function deleteWord(syllables, index) {
+            const word = appData.wordsBySyllables[syllables][index];
+            if (confirm(`Tem certeza que deseja excluir a palavra "${word}"?`)) {
+                appData.wordsBySyllables[syllables].splice(index, 1);
+                saveData();
+                loadWords();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('game-students', JSON.stringify(appData.students));
+            localStorage.setItem('game-words', JSON.stringify(appData.wordsBySyllables));
+        }
+
+        function setupEventListeners() {
+            // Admin
+            elements.addStudentBtn.addEventListener('click', addStudent);
+            elements.addWordBtn.addEventListener('click', addWord);
+            
+            elements.studentName.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addStudent();
+            });
+            
+            elements.wordText.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addWord();
+            });
+            
+            // Jogo
+            elements.drawWordBtn.addEventListener('click', drawWord);
+            elements.nextRoundBtn.addEventListener('click', nextRound);
+            elements.closeWinnerBtn.addEventListener('click', () => {
+                elements.winnerModal.classList.remove('show');
+                location.reload();
+            });
+            
+            elements.correctBtn.addEventListener('click', () => registerAnswer(true));
+            elements.wrongBtn.addEventListener('click', () => registerAnswer(false));
+            
+            elements.resetBtn.addEventListener('click', () => {
+                if (confirm('Tem certeza que deseja reiniciar todos os pontos?')) {
+                    resetGameData();
+                }
+            });
+        }
+
+        // Funções do jogo
+        function initGameData() {
+            gameState.studentsData = {};
+            appData.students.forEach(student => {
                 gameState.studentsData[student] = {
                     points: 0,
                     attempts: []
                 };
             });
             
-            updateRoundInfo();
-            renderStudentsList();
-            updateRanking();
-            saveGameState();
+            if (document.getElementById('game').classList.contains('active')) {
+                renderStudentsListGame();
+                updateRanking();
+            }
+        }
+
+        function drawWord() {
+            if (gameState.currentStudentIndex >= appData.students.length) {
+                alert("Todos os alunos já jogaram nesta rodada!");
+                return;
+            }
+            
+            elements.loading.style.display = 'flex';
+            elements.currentWord.textContent = '';
+            elements.drawWordBtn.disabled = true;
+            toggleAnswerButtons(false);
             resetTimer();
-            elements.currentWord.textContent = 'Clique em "Sortear Palavra" para começar';
-            elements.nextRoundBtn.disabled = true;
-            elements.drawWordBtn.disabled = false;
+            
+            setTimeout(() => {
+                const syllableCount = gameState.currentRound;
+                const possibleWords = appData.wordsBySyllables[syllableCount] || [];
+                
+                if (possibleWords.length === 0) {
+                    elements.currentWord.textContent = 'Nenhuma palavra cadastrada para esta rodada';
+                    elements.loading.style.display = 'none';
+                    elements.drawWordBtn.disabled = false;
+                    return;
+                }
+                
+                gameState.currentWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
+                
+                elements.currentWord.textContent = gameState.currentWord;
+                elements.loading.style.display = 'none';
+                toggleAnswerButtons(true);
+                startTimer();
+                renderStudentsListGame();
+            }, 1500);
         }
 
-        // Atualiza as informações da rodada
-        function updateRoundInfo() {
-            elements.currentRound.textContent = gameState.currentRound;
-            elements.syllablesCount.textContent = gameState.currentRound;
+        function toggleAnswerButtons(show) {
+            elements.correctBtn.style.display = show ? 'block' : 'none';
+            elements.wrongBtn.style.display = show ? 'block' : 'none';
         }
 
-        // Renderiza a lista de alunos
-        function renderStudentsList() {
+        function startTimer() {
+            resetTimer();
+            gameState.timeLeft = 20;
+            updateTimerDisplay();
+            
+            gameState.timer = setInterval(() => {
+                gameState.timeLeft--;
+                updateTimerDisplay();
+                
+                if (gameState.timeLeft <= 0) {
+                    clearInterval(gameState.timer);
+                    registerAnswer(false);
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            elements.timer.textContent = `${gameState.timeLeft}s`;
+            
+            if (gameState.timeLeft <= 10) {
+                elements.timer.style.backgroundColor = '#dc3545';
+            } else if (gameState.timeLeft <= 20) {
+                elements.timer.style.backgroundColor = '#fd7e14';
+            } else {
+               elements.timer.style.backgroundColor = "var(--accent-color)";
+            }
+        }
+
+        function resetTimer() {
+            if (gameState.timer) {
+                clearInterval(gameState.timer);
+            }
+            gameState.timeLeft = 20;
+            elements.timer.textContent = '20s';
+            elements.timer.style.backgroundColor = "var(--accent-color)";
+        }
+
+        function registerAnswer(correct) {
+            resetTimer();
+            
+            const currentStudent = appData.students[gameState.currentStudentIndex];
+            const syllableCount = gameState.currentRound;
+            
+            gameState.studentsData[currentStudent].attempts.push(correct);
+            if (correct) {
+                gameState.studentsData[currentStudent].points += syllableCount;
+            }
+            
+            gameState.currentStudentIndex++;
+            
+            if (gameState.currentStudentIndex >= appData.students.length) {
+                gameState.roundFinished = true;
+                elements.nextRoundBtn.disabled = false;
+            }
+            
+            toggleAnswerButtons(false);
+            renderStudentsListGame();
+            updateRanking();
+            
+            if (!gameState.roundFinished) {
+                elements.drawWordBtn.disabled = false;
+                elements.currentWord.textContent = 'Próximo aluno: ' + appData.students[gameState.currentStudentIndex];
+            } else {
+                elements.currentWord.textContent = 'Rodada concluída! Clique em "Próxima Rodada"';
+            }
+        }
+
+        function renderStudentsListGame() {
             elements.studentsList.innerHTML = '';
             
-            students.forEach((student, index) => {
+            appData.students.forEach((student, index) => {
                 const studentData = gameState.studentsData[student];
                 const studentCard = document.createElement('div');
                 studentCard.className = `student-card ${index === gameState.currentStudentIndex && !gameState.roundFinished ? 'active' : ''}`;
@@ -676,7 +1019,6 @@
             });
         }
 
-        // Atualiza o ranking
         function updateRanking() {
             elements.rankingList.innerHTML = '';
             
@@ -696,131 +1038,23 @@
             });
         }
 
-        // Sorteia uma nova palavra
-        function drawWord() {
-            if (gameState.currentStudentIndex >= students.length) {
-                alert("Todos os alunos já jogaram nesta rodada!");
-                return;
-            }
-            
-            elements.loading.style.display = 'flex';
-            elements.currentWord.textContent = '';
-            elements.drawWordBtn.disabled = true;
-            toggleAnswerButtons(false);
-            resetTimer();
-            
-            setTimeout(() => {
-                const syllableCount = gameState.currentRound;
-                const possibleWords = wordsBySyllables[syllableCount];
-                gameState.currentWord = possibleWords[Math.floor(Math.random() * possibleWords.length)];
-                
-                elements.currentWord.textContent = gameState.currentWord;
-                elements.loading.style.display = 'none';
-                toggleAnswerButtons(true);
-                startTimer();
-                renderStudentsList();
-            }, 1500);
-        }
-
-        // Alterna a visibilidade dos botões de resposta
-        function toggleAnswerButtons(show) {
-            elements.correctBtn.style.display = show ? 'block' : 'none';
-            elements.wrongBtn.style.display = show ? 'block' : 'none';
-        }
-
-        // Inicia o timer
-        function startTimer() {
-            resetTimer();
-            gameState.timeLeft = 20;
-            updateTimerDisplay();
-            
-            gameState.timer = setInterval(() => {
-                gameState.timeLeft--;
-                updateTimerDisplay();
-                
-                if (gameState.timeLeft <= 0) {
-                    clearInterval(gameState.timer);
-                    registerAnswer(false);
-                }
-            }, 1000);
-        }
-
-        // Atualiza o display do timer
-        function updateTimerDisplay() {
-            elements.timer.textContent = `${gameState.timeLeft}s`;
-            
-            if (gameState.timeLeft <= 10) {
-                elements.timer.style.backgroundColor = '#dc3545';
-            } else if (gameState.timeLeft <= 20) {
-                elements.timer.style.backgroundColor = '#fd7e14';
-            } else {
-               elements.timer.style.backgroundColor = "var(--accent-color)";
-
-            }
-        }
-
-        // Reseta o timer
-        function resetTimer() {
-            if (gameState.timer) {
-                clearInterval(gameState.timer);
-            }
-            gameState.timeLeft = 20;
-            elements.timer.textContent = '20s';
-            elements.timer.style.backgroundColor = "var(--accent-color)";
-
-        }
-
-        // Registra a resposta do aluno
-        function registerAnswer(correct) {
-            resetTimer();
-            
-            const currentStudent = students[gameState.currentStudentIndex];
-            const syllableCount = gameState.currentRound;
-            
-            gameState.studentsData[currentStudent].attempts.push(correct);
-            if (correct) {
-                gameState.studentsData[currentStudent].points += syllableCount;
-            }
-            
-            gameState.currentStudentIndex++;
-            
-            if (gameState.currentStudentIndex >= students.length) {
-                gameState.roundFinished = true;
-                elements.nextRoundBtn.disabled = false;
-            }
-            
-            toggleAnswerButtons(false);
-            renderStudentsList();
-            updateRanking();
-            saveGameState();
-            
-            if (!gameState.roundFinished) {
-                elements.drawWordBtn.disabled = false;
-                elements.currentWord.textContent = 'Próximo aluno: ' + students[gameState.currentStudentIndex];
-            } else {
-                elements.currentWord.textContent = 'Rodada concluída! Clique em "Próxima Rodada"';
-            }
-        }
-
-        // Avança para a próxima rodada
         function nextRound() {
             gameState.currentRound++;
             gameState.currentStudentIndex = 0;
             gameState.roundFinished = false;
             
             if (gameState.currentRound <= 4) {
-                updateRoundInfo();
-                renderStudentsList();
+                elements.currentRound.textContent = gameState.currentRound;
+                elements.syllablesCount.textContent = gameState.currentRound;
                 elements.drawWordBtn.disabled = false;
                 elements.nextRoundBtn.disabled = true;
                 elements.currentWord.textContent = 'Clique em "Sortear Palavra" para começar';
-                saveGameState();
+                renderStudentsListGame();
             } else {
                 showWinner();
             }
         }
 
-        // Mostra o modal com o vencedor
         function showWinner() {
             let winner = '';
             let maxPoints = -1;
@@ -835,35 +1069,28 @@
             elements.winnerName.textContent = winner;
             elements.winnerPoints.textContent = maxPoints;
             elements.winnerModal.classList.add('show');
-            localStorage.removeItem('syllableGameState');
         }
 
-        // Salva o estado do jogo
-        function saveGameState() {
-            localStorage.setItem('syllableGameState', JSON.stringify(gameState));
-        }
-
-        // Configura os event listeners
-        function setupEventListeners() {
-            elements.drawWordBtn.addEventListener('click', drawWord);
-            elements.nextRoundBtn.addEventListener('click', nextRound);
-            elements.closeWinnerBtn.addEventListener('click', () => {
-                elements.winnerModal.classList.remove('show');
-                location.reload();
-            });
+        function resetGameData() {
+            initGameData();
+            gameState.currentRound = 1;
+            gameState.currentStudentIndex = 0;
+            gameState.roundFinished = false;
             
-            elements.correctBtn.addEventListener('click', () => registerAnswer(true));
-            elements.wrongBtn.addEventListener('click', () => registerAnswer(false));
+            elements.currentRound.textContent = gameState.currentRound;
+            elements.syllablesCount.textContent = gameState.currentRound;
+            elements.nextRoundBtn.disabled = true;
+            elements.drawWordBtn.disabled = false;
+            elements.currentWord.textContent = 'Clique em "Sortear Palavra" para começar';
             
-            elements.resetBtn.addEventListener('click', () => {
-                if (confirm('Tem certeza que deseja reiniciar todos os pontos?')) {
-                    resetGameData();
-                }
-            });
+            renderStudentsListGame();
+            updateRanking();
+            resetTimer();
         }
 
-        // Inicia o jogo quando a página carrega
-        window.addEventListener('DOMContentLoaded', initGame);
+        // Funções globais para os botões de ação
+        window.deleteStudent = deleteStudent;
+        window.deleteWord = deleteWord;
     </script>
 </body>
 </html>
